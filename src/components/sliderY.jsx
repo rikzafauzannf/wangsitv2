@@ -1,9 +1,9 @@
-"use client"
-import React from 'react'
+"use client";
+import React from 'react';
 import Slider from "react-slick";
 
-const SliderY = ({children}) => {
-    const settings = {
+const SliderY = ({ children }) => {
+  const settings = {
     dots: true,
     infinite: true,
     slidesToShow: 3,
@@ -21,15 +21,12 @@ const SliderY = ({children}) => {
       console.log("after change", currentSlide);
     }
   };
+
   return (
     <Slider {...settings}>
-        {React.Children.map(children, (child, index) => (
-            <div key={index} style={{ marginBottom: '40px' }}>
-                {child}
-            </div>
-        ))}      
-    </Slider>   
-  )
-}
+      {children}
+    </Slider>
+  );
+};
 
-export default SliderY
+export default SliderY;

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import Chart from 'apexcharts';
+import Chart from 'react-apexcharts';
 
 const BarChart = ({ data }) => {
     const chartData = {
