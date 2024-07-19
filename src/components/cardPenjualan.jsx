@@ -13,7 +13,7 @@ const CardPenjualan = ({kecamatan, komoditas, terjual,icons}) => {
                 </div>
                 <p className='text-sm font-medium'>{komoditas}</p>
                 <p className='text-base font-bold'>{kecamatan}</p>
-                <p className='text-2xl font-extrabold'>{terjual}</p>
+                <p className='text-2xl font-extrabold'>{terjual}<span className='text-base font-medium'>.Kg</span> </p>
             </div>
       </div>
       </>

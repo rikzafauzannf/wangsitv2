@@ -79,7 +79,7 @@ const Home = () => {
           </SliderX>
         </div>
       </div>
-      <div className="md:max-w-[28%]">
+      <div className="md:max-w-[28%] w-full">
       <div className='card w-full shadow-lg'>
         <div className='card-body'>
           <div className='mb-3 flex justify-start items-center gap-3'>
