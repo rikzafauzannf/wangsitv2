@@ -2,7 +2,6 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { HiOutlineTrendingUp, HiTag } from "react-icons/hi";
-// const DummyData = dynamic(() => import("./dummyData"), { ssr: false });
 const SliderX = dynamic(() => import('@/components/sliderX'), { ssr: false });
 const BarChart = dynamic(() => import('@/components/barChart'), { ssr: false });
 const SliderY = dynamic(() => import('@/components/sliderY'), { ssr: false });
@@ -10,7 +9,6 @@ import CardPenjualan from '@/components/cardPenjualan';
 import { dataKomoditas, dataTerlaris } from "./dummyData";
 
 const Home = () => {
-  // const {dataKomoditas, dataTerlaris} = DummyData
 
   return (
     <section className='flex md:flex-row flex-col justify-start items-start gap-4'>
@@ -21,7 +19,7 @@ const Home = () => {
             <h1 className='font-bold text-2xl'>Komoditas Per Kecamatan</h1>
           </div>
           <hr />
-                  <SliderX>
+          <SliderX>
             {dataKomoditas.map((item, index) => (
               <div key={index}>
                 <div className='flex justify-start items-center gap-2'>
@@ -43,7 +41,7 @@ const Home = () => {
             <h1 className='font-bold text-2xl'>Terlaris</h1>
           </div>
           <hr />
-                  <SliderY>
+          <SliderY>
             {dataTerlaris.map((item, index) => (
               <div key={index}>
                 <CardPenjualan icons={item.icons} kecamatan={item.kecamatan} komoditas={item.komoditas} terjual={item.terjual} />

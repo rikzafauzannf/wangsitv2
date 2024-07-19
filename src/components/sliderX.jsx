@@ -9,8 +9,8 @@ const SliderX = ({children}) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 2000,
+    speed: 7000,
+    autoplaySpeed: 10000, 
     cssEase: "linear",
   };
 
