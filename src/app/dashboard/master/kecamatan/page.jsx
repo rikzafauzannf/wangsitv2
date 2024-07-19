@@ -16,15 +16,15 @@ const DataKecamatan = () => {
         const dataForm = { kecamatan: data.kecamatan, createAt: new Date() }
         try {
             await createKecamatan(dataForm);
-            setRefresh(prev => !prev);
+            setRefresh(prev => !prev); // Toggle refresh
             reset();
             Swal.fire({
                 position: "top-end",
                 icon: "success",
-                title: "Your work has been saved",
+                title: "Data telah disimpan",
                 showConfirmButton: false,
                 timer: 1500
-              });
+            });
         } catch (error) {
             console.error("Error creating document:", error);
             Swal.fire(

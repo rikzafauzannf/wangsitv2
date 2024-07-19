@@ -17,12 +17,8 @@ const TableEvents = ({ refresh }) => {
     const [selectedRows, setSelectedRows] = useState([]); // Tambahkan state untuk menyimpan baris yang dipilih
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            queryClient.invalidateQueries(["dataEvents"]); // Cek data setiap beberapa detik
-        }, 2000); // Setiap 5 detik
-
-        return () => clearInterval(interval); // Cleanup interval
-    }, []); // Hanya sekali saat komponen di-mount
+        queryClient.invalidateQueries(["dataEvents"]); // Fetch data secara otomatis saat komponen di-mount
+    }, [refresh]); // Tambahkan refresh sebagai dependency
 
     const dataset = dataEvents.map((data) => ({
         id: data.id,
