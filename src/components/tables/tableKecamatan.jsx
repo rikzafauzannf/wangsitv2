@@ -6,6 +6,7 @@ import { HiPrinter } from 'react-icons/hi'
 import { format } from 'date-fns';
 import Swal from 'sweetalert2'
 
+
 const TableKecamatan = ({ refresh }) => {
     const queryClient = useQueryClient();
     const { data: dataKecamatan = [], error, isLoading } = useQuery({
@@ -16,8 +17,12 @@ const TableKecamatan = ({ refresh }) => {
     const [selectedRows, setSelectedRows] = useState([]); // Tambahkan state untuk menyimpan baris yang dipilih
 
     useEffect(() => {
-        queryClient.invalidateQueries(["dataKecamatan"]); // Fetch data secara otomatis saat komponen di-mount
-    }, [refresh]); // Tambahkan refresh sebagai dependency
+        const interval = setInterval(() => {
+            queryClient.invalidateQueries(["dataKecamatan"]); // Cek data setiap beberapa detik
+        }, 2000); // Setiap 5 detik
+
+        return () => clearInterval(interval); // Cleanup interval
+    }, []); // Hanya sekali saat komponen di-mount
 
     const dataset = dataKecamatan.map((data) => ({
         id: data.id,

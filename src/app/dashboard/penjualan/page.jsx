@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getKomoditasData } from '@/lib/service/serviceKomoditas'
 import { createPenjualan } from '@/lib/service/servicePenjualan'
 import TablePenjualan from '@/components/tables/tablePenjualan'
+import { getKecamatanData } from '@/lib/service/serviceKecamatan'
 
 const DataPenjualan = () => {
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();

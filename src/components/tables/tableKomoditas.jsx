@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import Swal from 'sweetalert2'
 import { deleteKomoditas, getKomoditasData } from '@/lib/service/serviceKomoditas';
 
+
 const TableKomoditas = ({ refresh }) => {
     const queryClient = useQueryClient();
     const { data: dataKomoditas = [], error, isLoading } = useQuery({
@@ -16,8 +17,12 @@ const TableKomoditas = ({ refresh }) => {
     const [selectedRows, setSelectedRows] = useState([]); // Tambahkan state untuk menyimpan baris yang dipilih
 
     useEffect(() => {
-        queryClient.invalidateQueries(["dataKomoditas"]); // Fetch data secara otomatis saat komponen di-mount
-    }, [refresh]); // Tambahkan refresh sebagai dependency
+        const interval = setInterval(() => {
+            queryClient.invalidateQueries(["dataKomoditas"]); // Cek data setiap beberapa detik
+        }, 2000); // Setiap 5 detik
+
+        return () => clearInterval(interval); // Cleanup interval
+    }, []); // Hanya sekali saat komponen di-mount
 
     const dataset = dataKomoditas.map((data) => ({
         id: data.id,
