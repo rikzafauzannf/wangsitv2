@@ -6,10 +6,10 @@ import Swal from 'sweetalert2'
 import InputField from '@/components/input/inputField'
 import InputSelect from '@/components/input/inputSelect'
 import { useQuery } from '@tanstack/react-query'
-import TablePenjualan from '@/components/tables/tablePenjualan'
 import { getKecamatanData } from '@/lib/service/serviceKecamatan'
 import { createEvent } from '@/lib/service/serviceEvent'
 import TableEvents from '@/components/tables/tableEvents'
+import { getKomoditasData } from '@/lib/service/serviceKomoditas'
 
 const DataEvent = () => {
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
@@ -20,10 +20,18 @@ const DataEvent = () => {
         queryFn: () => getKecamatanData(),
     });
 
+    const { data: DataKomoditas= [] } = useQuery({
+        queryKey: ["komoditasdata"],
+        queryFn: () => getKomoditasData(),
+    });
+
     const onSubmit = async (data) => {
         const dataForm = {
             kecamatan: data.Nkecamatan,
             tanggal: data.tglStart,
+            komoditas: data.NKomoditas,
+            harga: data.harga,
+            stok : data.stok,
             alamat: data.alamat,
             createAt: new Date()
         }
@@ -59,6 +67,7 @@ const DataEvent = () => {
     ]
 
     const dataKec = DataKecamatan.map((item) => item.kecamatan)
+    const dataKom = DataKomoditas.map((item)=>item.komoditas)
   return (
       <>
           <Navigator title='Data Events' linkItem={linkItem} />
@@ -68,6 +77,13 @@ const DataEvent = () => {
                         <div className='flex-1 space-y-1'>
                             <InputSelect label={"Nama Kecamatan"} inputDefault={"Pilih Kecamatan"} valueSelect={dataKec} {...register("Nkecamatan", { required: true })} />
                             <InputField label={"Tanggal Mulai"} type={"date"} placeholder={"Setting tanggal"} {...register("tglStart", { required: true })} />
+                            <InputSelect label={"Komoditas"} inputDefault={"Pilih Komoditas"} valueSelect={dataKom} {...register("NKomoditas", { required: true })} />
+                            <div className='flex md:flex-row flex-col justify-start items-start gap-3'>
+                              <InputField label={"Harga"} type={"number"} placeholder={"Masukan Harga"} {...register("harga", { required: true })} />
+                              <div className='flex-1 md:min-w-[80%] w-full'>
+                              <InputField label={"Stok"} type={"number"} placeholder={"Stok Tersedia"} {...register("stok", { required: true })} />
+                              </div>
+                            </div>
                             <InputField label={"Alamat"} type={"text"} placeholder={"Jl....."} {...register("alamat", { required: true })} />
                         </div>
                         <button type='submit' className='btn btn-lg bg-primary glass h-auto shadow-md text-white'>

@@ -5,16 +5,12 @@ import { HiDatabase } from 'react-icons/hi'
 const SideBar = () => {
     const dataLink = [
         {
-            title: "Dashboard",
+            title: "Penjualan",
             linkTo: "/dashboard"
         },
         {
             title: "Events",
             linkTo: "/dashboard/events"
-        },
-        {
-            title: "Penjualan",
-            linkTo: "/dashboard/penjualan"
         },
         
     ]

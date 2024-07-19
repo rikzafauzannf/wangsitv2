@@ -24,6 +24,9 @@ const TableEvents = ({ refresh }) => {
         id: data.id,
         kecamatan: data.kecamatan,
         tanggal: data.tanggal,
+        komoditas: data.komoditas,
+        harga: data.harga,
+        stok: data.stok,
         alamat: data.alamat,
         create: data.createAt ? format(new Date(data.createAt.seconds * 1000), 'yyyy-MM-dd') : 'N/A', // Format timestamp
     }));
@@ -68,7 +71,7 @@ const TableEvents = ({ refresh }) => {
         // Fungsi untuk mengonversi data ke format CSV
         const convertToCSV = (data) => {
             const header = 'Event,Tanggal\n'; // Header CSV
-            const rows = data.map(row => `${row.event},${row.create}`).join('\n'); // Baris data
+            const rows = data.map(row => `${row.kecamatan},${row.create}`).join('\n'); // Baris data
             return header + rows; // Gabungkan header dan baris
         };
 
@@ -110,6 +113,21 @@ const TableEvents = ({ refresh }) => {
         {
           name: "Tanggal",
           selector: (row) => row.tanggal,
+          sortable: true,
+        },
+        {
+            name: "Komoditas",
+            selector: (row) => row.komoditas,
+            sortable: true,
+        },
+        {
+            name: "Harga",
+            selector: (row) => row.harga,
+            sortable: true,
+        },
+        {
+          name: "Stok",
+          selector: (row) => row.stok,
           sortable: true,
         },
         {

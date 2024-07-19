@@ -6,30 +6,58 @@ const SliderX = dynamic(() => import('@/components/sliderX'), { ssr: false });
 const BarChart = dynamic(() => import('@/components/barChart'), { ssr: false });
 const SliderY = dynamic(() => import('@/components/sliderY'), { ssr: false });
 import CardPenjualan from '@/components/cardPenjualan';
-
-import { useQuery } from "@tanstack/react-query"; 
-import { dataKomoditas } from "./dummyData";
-import { useEffect } from "react";
-import { queryClient } from "@/lib/service/reactQuery";
+import { getKomoditasData } from "@/lib/service/serviceKomoditas";
 import { getPenjualanData } from "@/lib/service/servicePenjualan";
+import { useQuery } from "@tanstack/react-query"; 
+import { queryClient } from "@/lib/service/reactQuery";
+import { useEffect } from "react";
+import CardEvents from "@/components/cardEvents";
+import { getEventData } from "@/lib/service/serviceEvent";
 
 const Home = () => {
-  const { data: dataPenjualan = []} = useQuery({
+  const { data: dataKomoditas = [] } = useQuery({
+    queryKey: ["dataKomoditas"],
+    queryFn: getKomoditasData,
+  });
+
+  const { data: dataPenjualan = [] } = useQuery({
     queryKey: ["dataPenjualan"],
     queryFn: getPenjualanData,
   });
 
+  const { data: dataEvents = [] } = useQuery({
+    queryKey: ["dataEvents"],
+    queryFn: getEventData,
+  });
+
   useEffect(() => {
     const interval = setInterval(() => {
-        queryClient.invalidateQueries(["dataPenjualan"]); // Cek data setiap beberapa detik
-    }, 10.800000); // 24jam
+        queryClient.invalidateQueries(["dataKomoditas","dataPenjualan","dataEvents"]); // Cek data setiap beberapa detik
+    }, 86.400000); // Setiap 5 detik
 
     return () => clearInterval(interval); // Cleanup interval
-  }, []); // Hanya sekali saat komponen di-mount
+}, []);
+
+  const dataK = dataKomoditas.map((komoditas) => {
+    const penjualanData = dataPenjualan
+      .filter(penjualan => penjualan.komoditas === komoditas.komoditas)
+      .map(penjualan => ({
+        label: penjualan.kecamatan,
+        value: parseInt(penjualan.kuota, 10),
+      }));
+
+    if (penjualanData.length === 0) return null; // Tidak muncul jika data penjualan kosong
+
+    return {
+      namaKomoditas: komoditas.komoditas,
+      icons: null,
+      data: penjualanData,
+    };
+  }).filter(Boolean); // Filter untuk menghilangkan nilai null
 
   return (
     <section className='flex md:flex-row flex-col justify-start items-start gap-4'>
-      <div className='card flex-1 w-full md:max-w-[80%] shadow-lg'>
+      <div className='card flex-1 w-full md:max-w-[70%] shadow-lg'>
         <div className='card-body'>
           <div className='mb-3 flex justify-start items-center gap-3'>
             <HiOutlineTrendingUp size={30} className='text-primary' />
@@ -37,7 +65,7 @@ const Home = () => {
           </div>
           <hr />
           <SliderX>
-            {dataKomoditas.map((item, index) => (
+            {dataK.map((item, index) => (
               <div key={index}>
                 <div className='flex justify-start items-center gap-2'>
                   {item.icons && (
@@ -51,7 +79,8 @@ const Home = () => {
           </SliderX>
         </div>
       </div>
-      <div className='card w-full md:max-w-[20%] shadow-lg'>
+      <div className="md:max-w-[28%]">
+      <div className='card w-full shadow-lg'>
         <div className='card-body'>
           <div className='mb-3 flex justify-start items-center gap-3'>
             <HiTag size={30} className='text-primary drop-shadow-md' />
@@ -71,6 +100,28 @@ const Home = () => {
             ))}
           </SliderY>
         </div>
+      </div>
+      <div className='card w-full  shadow-lg'>
+        <div className='card-body'>
+          <div className='mb-3 flex justify-start items-center gap-3'>
+            <HiTag size={30} className='text-primary drop-shadow-md' />
+            <h1 className='font-bold text-2xl'>Events</h1>
+          </div>
+          <hr />
+          <SliderX>
+            {dataEvents.map((items, index) => (
+              <CardEvents key={index}
+                kecamatan={items.kecamatan}
+                komoditas={items.komoditas}
+                harga={items.harga}
+                stok={items.stok}
+                tanggal={items.tanggal}
+                alamat={items.alamat}
+              />
+            ))}
+          </SliderX>
+        </div>
+      </div>
       </div>
     </section>
   );
