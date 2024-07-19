@@ -35,7 +35,7 @@ const SideBar = () => {
                       })}  
                       </div>
                         <details className="dropdown">
-                            <summary className="btn rounded-md shadow-lg bg-primary glass w-full">Master Data</summary>
+                            <summary className="btn rounded-md shadow-lg bg-primary glass w-full text-white">Master Data</summary>
                             <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                                 <li><Link href={"/dashboard/master/kecamatan"}>Data Kecamatan</Link></li>
                                 <li><Link href={"/dashboard/master/komoditas"}>Data Komoditas</Link></li>
