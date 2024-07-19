@@ -9,6 +9,10 @@ const SideBar = () => {
             linkTo: "/dashboard"
         },
         {
+            title: "Events",
+            linkTo: "/dashboard/events"
+        },
+        {
             title: "Penjualan",
             linkTo: "/dashboard/penjualan"
         },

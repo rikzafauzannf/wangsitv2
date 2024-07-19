@@ -5,7 +5,6 @@ import { HiPlus } from 'react-icons/hi'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 import { createKomoditas } from '@/lib/service/serviceKomoditas'
-import TableKecamatan from '@/components/tables/tableKecamatan'
 import TableKomoditas from '@/components/tables/tableKomoditas'
 import InputField from '@/components/input/inputField'
 
@@ -50,7 +49,7 @@ const DataKomoditas = () => {
           <Navigator title='Master Komoditas' linkItem={linkItem} />
           <div className='card rounded-md shadow-lg p-5 '>
               <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='flex justify-center items-stretch flex-row'>
+                    <div className='flex justify-center items-stretch md:flex-row flex-col'>
                         <div className='flex-1'>
                             <InputField label={"Nama komoditas"} type={"text"} placeholder={"Masukkan Nama komoditas"} {...register("komoditas", { required: true })}/>
                         </div>

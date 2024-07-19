@@ -6,12 +6,12 @@ import Swal from 'sweetalert2'
 import InputField from '@/components/input/inputField'
 import InputSelect from '@/components/input/inputSelect'
 import { useQuery } from '@tanstack/react-query'
-import { getKomoditasData } from '@/lib/service/serviceKomoditas'
-import { createPenjualan } from '@/lib/service/servicePenjualan'
 import TablePenjualan from '@/components/tables/tablePenjualan'
 import { getKecamatanData } from '@/lib/service/serviceKecamatan'
+import { createEvent } from '@/lib/service/serviceEvent'
+import TableEvents from '@/components/tables/tableEvents'
 
-const DataPenjualan = () => {
+const DataEvent = () => {
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
     const [refresh, setRefresh] = React.useState(false);
     
@@ -20,23 +20,15 @@ const DataPenjualan = () => {
         queryFn: () => getKecamatanData(),
     });
 
-    const { data: DataKomoditas= [] } = useQuery({
-        queryKey: ["komoditasdata"],
-        queryFn: () => getKomoditasData(),
-    });
-    
-
-
     const onSubmit = async (data) => {
         const dataForm = {
             kecamatan: data.Nkecamatan,
             tanggal: data.tglStart,
-            komoditas: data.NKomoditas,
-            kuota: data.Kuota,
+            alamat: data.alamat,
             createAt: new Date()
         }
         try {
-            await createPenjualan(dataForm);
+            await createEvent(dataForm);
             setRefresh(prev => !prev);
             reset();
             Swal.fire({
@@ -61,24 +53,22 @@ const DataPenjualan = () => {
             linkName:"Dashboard"
         },
         {
-            linkNavigate: "/dashboard/penjualan",
-            linkName:"penjualan"
+            linkNavigate: "/dashboard/events",
+            linkName:"events"
         }
     ]
 
     const dataKec = DataKecamatan.map((item) => item.kecamatan)
-    const dataKom = DataKomoditas.map((item)=>item.komoditas)
   return (
       <>
-          <Navigator title='Data Penjualan' linkItem={linkItem} />
+          <Navigator title='Data Events' linkItem={linkItem} />
           <div className='card rounded-md shadow-lg p-5 '>
               <form onSubmit={handleSubmit(onSubmit)}>
                     <div className='flex justify-center items-stretch flex-col gap-4'>
                         <div className='flex-1 space-y-1'>
                             <InputSelect label={"Nama Kecamatan"} inputDefault={"Pilih Kecamatan"} valueSelect={dataKec} {...register("Nkecamatan", { required: true })} />
                             <InputField label={"Tanggal Mulai"} type={"date"} placeholder={"Setting tanggal"} {...register("tglStart", { required: true })} />
-                            <InputSelect label={"Komoditas"} inputDefault={"Pilih Komoditas"} valueSelect={dataKom} {...register("NKomoditas", { required: true })} />
-                            <InputField label={"Kuota"} type={"number"} placeholder={"Setting Kuota"} {...register("Kuota", { required: true })} />
+                            <InputField label={"Alamat"} type={"text"} placeholder={"Jl....."} {...register("alamat", { required: true })} />
                         </div>
                         <button type='submit' className='btn btn-lg bg-primary glass h-auto shadow-md text-white'>
                             SIMPAN
@@ -86,9 +76,9 @@ const DataPenjualan = () => {
                     </div>
                 </form>
           </div>
-          <TablePenjualan refresh={refresh} />
+          <TableEvents refresh={refresh} />
       </>
   )
 }
 
-export default DataPenjualan
+export default DataEvent
