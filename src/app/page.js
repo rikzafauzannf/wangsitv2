@@ -41,9 +41,21 @@ const Home = () => {
   const dataK = dataKomoditas.map((komoditas) => {
     const penjualanData = dataPenjualan
       .filter(penjualan => penjualan.komoditas === komoditas.komoditas)
+      .reduce((acc, penjualan) => {
+        const existing = acc.find(item => item.label === penjualan.kecamatan);
+        if (existing) {
+          existing.value += parseInt(penjualan.kuota, 10); // Akumulasi nilai
+        } else {
+          acc.push({
+            label: penjualan.kecamatan,
+            value: parseInt(penjualan.kuota, 10),
+          });
+        }
+        return acc;
+      }, [])
       .map(penjualan => ({
-        label: penjualan.kecamatan,
-        value: parseInt(penjualan.kuota, 10),
+        label: penjualan.label,
+        value: penjualan.value,
       }));
 
     if (penjualanData.length === 0) return null; // Tidak muncul jika data penjualan kosong
