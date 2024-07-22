@@ -27,6 +27,7 @@ const BarChart = ({ data }) => {
                 enabled: true, // Enable data labels
                 style: {
                     colors: ['#ffffff'], // Set data label color to white
+                    fontSize: '18px', // Ubah ukuran font data label
                 },
                 formatter: function (val) {
                     return val + ' kg'; // Tambahkan 'kg' di akhir value
@@ -39,10 +40,18 @@ const BarChart = ({ data }) => {
             },
             xaxis: {
                 categories: data.map(item => item.label),
+                labels: {
+                    style: {
+                        fontSize: '14px', // Ubah ukuran font label sumbu X
+                    },
+                },
             },
             yaxis: {
                 title: {
                     text: 'PerKomoditas',
+                    style: {
+                        fontSize: '14px', // Ubah ukuran font judul sumbu Y
+                    },
                 },
             },
             fill: {
