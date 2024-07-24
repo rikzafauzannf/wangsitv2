@@ -30,15 +30,15 @@ const Home = () => {
     queryFn: getEventData,
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-        queryClient.invalidateQueries(["dataKomoditas","dataPenjualan","dataEvents"]); // Cek data setiap beberapa detik
-    }, 86.400000); // Setiap 5 detik
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //       queryClient.invalidateQueries(["dataKomoditas","dataPenjualan","dataEvents"]); // Cek data setiap beberapa detik
+  //   }, 86.400000); // Setiap 5 detik
 
-    return () => clearInterval(interval); // Cleanup interval
-}, []);
+  //   return () => clearInterval(interval); // Cleanup interval
+  // }, []);
 
-  const dataK = dataKomoditas.map((komoditas) => {
+  const dataK = dataKomoditas.reduce((acc, komoditas) => {
     const penjualanData = dataPenjualan
       .filter(penjualan => penjualan.komoditas === komoditas.komoditas)
       .reduce((acc, penjualan) => {
@@ -52,20 +52,37 @@ const Home = () => {
           });
         }
         return acc;
-      }, [])
-      .map(penjualan => ({
-        label: penjualan.label,
-        value: penjualan.value,
-      }));
+      }, []);
 
-    if (penjualanData.length === 0) return null; // Tidak muncul jika data penjualan kosong
+    if (penjualanData.length > 0) {
+        const existingKomoditas = acc.find(item => item.namaKomoditas === komoditas.komoditas);
+        if (existingKomoditas) {
+            existingKomoditas.data = existingKomoditas.data.concat(penjualanData);
+        } else {
+            acc.push({
+                namaKomoditas: komoditas.komoditas,
+                icons: null,
+                data: penjualanData,
+            });
+        }
+    }
+    return acc;
+}, []);
 
-    return {
-      namaKomoditas: komoditas.komoditas,
-      icons: null,
-      data: penjualanData,
-    };
-  }).filter(Boolean); // Filter untuk menghilangkan nilai null
+  const dataPenjualanGrouped = dataPenjualan.reduce((acc, item) => {
+    const existing = acc.find(entry => entry.kecamatan === item.kecamatan && entry.komoditas === item.komoditas);
+    if (existing) {
+        existing.kuota += parseInt(item.kuota, 10); // Akumulasi nilai kuota
+    } else {
+        acc.push({
+            icons: item.icons,
+            kecamatan: item.kecamatan,
+            komoditas: item.komoditas,
+            kuota: parseInt(item.kuota, 10),
+        });
+    }
+    return acc;
+}, []);
 
   return (
     <section className='flex md:flex-row flex-col justify-start items-start gap-4'>
@@ -100,7 +117,7 @@ const Home = () => {
           </div>
           <hr />
           <SliderY>
-            {dataPenjualan.map((item, index) => (
+            {dataPenjualanGrouped.map((item, index) => (
               <div key={index}>
                 <CardPenjualan 
                   icons={item.icons} 
