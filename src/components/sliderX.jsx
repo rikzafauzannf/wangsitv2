@@ -4,7 +4,7 @@ import Slider from "react-slick";
 
 const SliderX = ({children}) => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
