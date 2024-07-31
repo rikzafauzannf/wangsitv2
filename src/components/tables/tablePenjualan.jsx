@@ -69,7 +69,7 @@ const TablePenjualan = ({ refresh }) => {
         // Fungsi untuk mengonversi data ke format CSV
         const convertToCSV = (data) => {
             const header = 'penjualan,Tanggal\n'; // Header CSV
-            const rows = data.map(row => `${row.penjualan},${row.create}`).join('\n'); // Baris data
+            const rows = data.map(row => `${row.kecamatan},${row.tanggal},${row.komoditas},${row.kuota}`).join('\n'); // Baris data
             return header + rows; // Gabungkan header dan baris
         };
 
